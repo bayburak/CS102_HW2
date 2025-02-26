@@ -15,26 +15,29 @@ public class Tile {
     }
 
     /*
-     * Compares tiles so that they can be added to the hands in order
+     * Compares tiles so that they can be added to the hands in order, prioritizes value over color
      */
     public int compareTo(Tile t) {
-        if(colorNameToInt() < t.colorNameToInt()) {
+
+        if(getValue() < t.getValue()) {
             return -1;
         }
-        else if(colorNameToInt() > t.colorNameToInt()) {
+        else if(getValue() > t.getValue()) {
             return 1;
         }
         else{
-             if(getValue() < t.getValue()) {
+             if(colorNameToInt() < t.colorNameToInt()) {
                 return -1;
             }
-            else if(getValue() > t.getValue()) {
+            else if(colorNameToInt() > t.colorNameToInt()) {
                 return 1;
             }
             else{
                 return 0;
             }
         }
+
+        
     }
 
     public int colorNameToInt() {

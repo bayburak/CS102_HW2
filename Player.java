@@ -10,29 +10,96 @@ public class Player {
     }
 
     /*
-     * TODO: removes and returns the tile in given index
+     * Removes the given tile and returns the removed tile, returns null if the given index is invalid.
      */
     public Tile getAndRemoveTile(int index) {
-        return null;
+        Tile removedTile = null;
+
+        //Checks if the index is valid
+        if(index >= 0 && index <= 14){
+            removedTile = playerTiles[index];
+
+            playerTiles[index] = null;
+            for(int i = index+1; i< playerTiles.length;i++){
+                playerTiles[i-1] = playerTiles[i];
+            }
+            playerTiles[playerTiles.length-1] = null;
+        }
+        numberOfTiles--;
+        return removedTile;
     }
 
     /*
-     * TODO: adds the given tile to the playerTiles in order
+     * Adds the given tile to the playerTiles in order
      * should also update numberOfTiles accordingly.
      * make sure playerTiles are not more than 15 at any time
      */
     public void addTile(Tile t) {
 
+        //makes sure the number of tiles don't exeed 15
+        if (numberOfTiles <= 14) {
+            for(int i = 0; i < numberOfTiles+1; i++){
+                Tile aTile = playerTiles[i];
+
+                // This ensures that we can add tiles if there are no tiles in the list yet or the tile we want to add goes in the last possible index.
+                if(aTile == null){
+                    playerTiles[i] = t;
+                }
+                //Compares prioritizing number then  looks for color
+                else if(t.compareTo(aTile) <= 0 ){
+                    // Shifts the array to make room for the new tile
+                    for(int k = numberOfTiles; k > i; k--){
+                        playerTiles[k] = playerTiles[k-1];
+                    }
+
+                    playerTiles[i] = t;
+                }
+
+                numberOfTiles++;
+            }
+        }
+
     }
 
     /*
-     * TODO: checks if this player's hand satisfies the winning condition
+     * checks if this player's hand satisfies the winning condition
      * to win this player should have 3 chains of length 4, extra tiles
      * does not disturb the winning condition
      * @return
      */
     public boolean isWinningHand() {
-        return false;
+        int noOfChains = 0;
+        Tile prevTile = null;
+        int counter = 1;
+
+        for(Tile currentTile : playerTiles){
+
+            //Skips the first tile because there is no prevTile at the moment 
+            if (currentTile == playerTiles[0]) { prevTile = currentTile; continue;}
+            
+            //Checks whether consecutive tiles have the same value,
+            // if they do have teh same value checks if they are different colors the nincrements the counter
+            // if not resets the counter
+            if(prevTile.getValue() == currentTile.getValue()){
+                if(prevTile.canFormChainWith(currentTile)){ counter++;}
+            }
+            else{
+                counter = 1;
+            }
+
+            //if counter has reached four this means a chain has formed, so we increment noOfChains and set the counter to zero
+            if(counter == 4){ 
+                noOfChains++;
+                counter = 1;
+            }
+    
+            prevTile = currentTile;
+        }
+
+        //If the total number of chains is true then this means the player has won
+        if(noOfChains >= 3) { return true;}
+        else { return false;}
+        
     }
 
     public int findPositionOfTile(Tile t) {
