@@ -60,20 +60,10 @@ public class OkeyGame {
      * it should return the toString method of the tile so that we can print what we picked
      */
     public String getLastDiscardedTile() {
-        int prevPlayerIndex = -1;
 
-        if (currentPlayerIndex == 0) {
-            prevPlayerIndex = 3;
-        }
-        else if (currentPLayerIndex > 0) {
-            prevPlayerIndex = currentPlayerIndex - 1;
-        }
-
-        if (players[prevPlayerIndex].discardedTile != null) {
-            players[currentPLayerIndex].addTile(players[prevPlayerIndex].discardedTile.get(0));
-            Tile someTile = players[prevPlayerIndex].discardedTile.get(0);
-            players[prevPlayerIndex].discardedTile.remove(0);
-            return someTile.toString();
+        if (lastDiscardedTile != null) {
+            players[currentPlayerIndex].addTile(lastDiscardedTile);
+            return lastDiscardedTile.toString();
         }
         return null;
     }

@@ -1,16 +1,12 @@
-import java.util.ArrayList;
-
 public class Player {
     String playerName;
     Tile[] playerTiles;
     int numberOfTiles;
-    ArrayList<Tile> discardedTile;
 
     public Player(String name) {
         setName(name);
         playerTiles = new Tile[15]; // there are at most 15 tiles a player owns at any time
         numberOfTiles = 0; // currently this player owns 0 tiles, will pick tiles at the beggining of the game
-        discardedTile = new ArrayList<>();
     }
 
     /*
@@ -30,7 +26,6 @@ public class Player {
             playerTiles[playerTiles.length-1] = null;
         }
         numberOfTiles--;
-        discardedTile.add(removedTile);
         return removedTile;
     }
 
