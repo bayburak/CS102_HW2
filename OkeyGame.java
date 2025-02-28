@@ -34,7 +34,24 @@ public class OkeyGame {
      * this method assumes the tiles are already shuffled
      */
     public void distributeTilesToPlayers() {
-
+        //The first player gets 15 tiles (index 0)
+        for (int i = 0; i < 15; i++) {
+            players.[0].addTile(tiles[i]);
+        }
+        for (int i = 0; i < tiles.length; i++) {
+            tiles[i] = tiles[i + 1];
+            tiles[tiles.length - (i + 1)] == null;
+        }
+        //Other players get 14 tiles (index 1, 2, and 3)
+        for (int m = 1; m < 4; m++) {
+            for (int i = 0; i < 14; i++) {
+                players[m].addTile(tiles[i]);
+            }
+            for (int i = 0; i < tiles.length; i++) {
+                tiles[i] = tiles[i + 1];
+                tiles[tiles.length - (i + 1)] == null;
+            }
+        }
     }
 
     /*
@@ -43,6 +60,21 @@ public class OkeyGame {
      * it should return the toString method of the tile so that we can print what we picked
      */
     public String getLastDiscardedTile() {
+        int prevPlayerIndex = -1;
+
+        if (currentPlayerIndex == 0) {
+            prevPlayerIndex = 3;
+        }
+        else if (currentPLayerIndex > 0) {
+            prevPlayerIndex = currentPlayerIndex - 1;
+        }
+
+        if (players[prevPlayerIndex].discardedTile != null) {
+            players[currentPLayerIndex].addTile(players[prevPlayerIndex].discardedTile.get(0));
+            Tile someTile = players[prevPlayerIndex].discardedTile.get(0);
+            players[prevPlayerIndex].discardedTile.remove(0);
+            return someTile.toString();
+        }
         return null;
     }
 
@@ -52,6 +84,15 @@ public class OkeyGame {
      * it should return the toString method of the tile so that we can print what we picked
      */
     public String getTopTile() {
+        if (tiles != null) {
+            players[currentPlayerIndex].addTile(tiles[0]);
+            Tile someTile = tiles[0];
+            for (int i = 0; i < tiles.length; i++) {
+                tiles[i] = tiles[i + 1];
+                tiles[tiles.length - 1] == null;
+            }
+            return someTile.toString();
+        }
         return null;
     }
 
