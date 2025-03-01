@@ -54,9 +54,8 @@ public class Player {
 
                     playerTiles[i] = t;
                 }
-
-                numberOfTiles++;
             }
+            numberOfTiles++;
         }
 
     }

@@ -34,23 +34,20 @@ public class OkeyGame {
      * this method assumes the tiles are already shuffled
      */
     public void distributeTilesToPlayers() {
-        //The first player gets 15 tiles (index 0)
+        int tileIndex = 0;
         for (int i = 0; i < 15; i++) {
-            players.[0].addTile(tiles[i]);
+            players[0].addTile(tiles[tileIndex++]);
         }
-        for (int i = 0; i < tiles.length; i++) {
-            tiles[i] = tiles[i + 1];
-            tiles[tiles.length - (i + 1)] == null;
-        }
-        //Other players get 14 tiles (index 1, 2, and 3)
         for (int m = 1; m < 4; m++) {
             for (int i = 0; i < 14; i++) {
-                players[m].addTile(tiles[i]);
+                players[m].addTile(tiles[tileIndex++]);
             }
-            for (int i = 0; i < tiles.length; i++) {
-                tiles[i] = tiles[i + 1];
-                tiles[tiles.length - (i + 1)] == null;
-            }
+        }
+        for (int i = 0; i < (112 - 57); i++) {
+            tiles[i] = tiles[tileIndex++];
+        }
+        for (int i = 57; i < 112; i++) {
+            tiles[i] = null;
         }
     }
 
@@ -60,7 +57,6 @@ public class OkeyGame {
      * it should return the toString method of the tile so that we can print what we picked
      */
     public String getLastDiscardedTile() {
-
         if (lastDiscardedTile != null) {
             players[currentPlayerIndex].addTile(lastDiscardedTile);
             return lastDiscardedTile.toString();
@@ -76,12 +72,12 @@ public class OkeyGame {
     public String getTopTile() {
         if (tiles != null) {
             players[currentPlayerIndex].addTile(tiles[0]);
-            Tile someTile = tiles[0];
-            for (int i = 0; i < tiles.length; i++) {
+            String pickedTile = tiles[0].toString();
+            for (int i = 0; i < tiles.length - 1; i++) {
                 tiles[i] = tiles[i + 1];
-                tiles[tiles.length - 1] == null;
             }
-            return someTile.toString();
+            tiles[tiles.length - 1] = null;
+            return pickedTile;
         }
         return null;
     }
