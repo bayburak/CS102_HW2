@@ -34,7 +34,21 @@ public class OkeyGame {
      * this method assumes the tiles are already shuffled
      */
     public void distributeTilesToPlayers() {
-
+        int tileIndex = 0;
+        for (int i = 0; i < 15; i++) {
+            players[0].addTile(tiles[tileIndex++]);
+        }
+        for (int m = 1; m < 4; m++) {
+            for (int i = 0; i < 14; i++) {
+                players[m].addTile(tiles[tileIndex++]);
+            }
+        }
+        for (int i = 0; i < (112 - 57); i++) {
+            tiles[i] = tiles[tileIndex++];
+        }
+        for (int i = 57; i < 112; i++) {
+            tiles[i] = null;
+        }
     }
 
     /*
@@ -43,6 +57,10 @@ public class OkeyGame {
      * it should return the toString method of the tile so that we can print what we picked
      */
     public String getLastDiscardedTile() {
+        if (lastDiscardedTile != null) {
+            players[currentPlayerIndex].addTile(lastDiscardedTile);
+            return lastDiscardedTile.toString();
+        }
         return null;
     }
 
@@ -52,6 +70,15 @@ public class OkeyGame {
      * it should return the toString method of the tile so that we can print what we picked
      */
     public String getTopTile() {
+        if (tiles != null) {
+            players[currentPlayerIndex].addTile(tiles[0]);
+            String pickedTile = tiles[0].toString();
+            for (int i = 0; i < tiles.length - 1; i++) {
+                tiles[i] = tiles[i + 1];
+            }
+            tiles[tiles.length - 1] = null;
+            return pickedTile;
+        }
         return null;
     }
 
