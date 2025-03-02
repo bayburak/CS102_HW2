@@ -116,8 +116,27 @@ public class OkeyGame {
      * You should consider if the discarded tile is useful for the computer in
      * the current status. Print whether computer picks from tiles or discarded ones.
      */
-    public void pickTileForComputer() {
-
+    public void pickTileForComputer() 
+    {
+        Player player = players[currentPlayerIndex];
+        if (lastDiscardedTile != null) 
+        {
+            for (Tile tile : player.getTiles()) 
+            {
+                if (tile != null) 
+                {
+                    if (lastDiscardedTile.canFormChainWith(tile)) 
+                    {
+                        player.addTile(lastDiscardedTile);
+                        lastDiscardedTile = null;
+                        System.out.println(player.getName() + " got the last discarded tile");
+                        return;
+                    }
+                }
+            }
+        }
+        String pickedTile = getTopTile();
+        System.out.println(player.getName() + " got a tile from the pile");
     }
 
     /*
@@ -126,8 +145,66 @@ public class OkeyGame {
      * known by other players. You may first discard duplicates and then
      * the single tiles and tiles that contribute to the smallest chains.
      */
-    public void discardTileForComputer() {
+    public void discardTileForComputer() 
+    {
+        Player player = players[currentPlayerIndex];
+        Tile[] playerTiles = player.getTiles();
+        int toBeDiscaredTileIndex = -1; //to shut the compiler and act as a refrence for future
+        for(int i = 0; i < playerTiles.length; i++) //search for a duplicate
+        {
+            if (playerTiles[i] != null) 
+            {
+                for(int j = i + 1; j < playerTiles.length; j++)
+                {
+                    if (playerTiles[j] != null) 
+                    {
+                        if (playerTiles[i].getValue() == playerTiles[j].getValue() && playerTiles[i].getColor() == playerTiles[j].getColor()) 
+                        {
+                            toBeDiscaredTileIndex = j;
+                            break; 
+                        }
+                    }
+                }
+            }
+            if (toBeDiscaredTileIndex != -1) //break out of the loop if we find a duplicate
+            {
+                break;
+            }
+        }
 
+        int leastUsefulTileindex = -1;
+        int lowestChainCount = 100;
+        int i = 0;
+
+        if (toBeDiscaredTileIndex == -1) // remove the tile that has the least chains
+        {
+            for (Tile tile : playerTiles) 
+            {
+                if (tile != null) 
+                {
+                    int chainCount = 0;
+                    for (Tile tile2 : playerTiles) 
+                    {
+                        if (tile2 != null && tile != tile2) 
+                        {
+                            if (tile.canFormChainWith(tile2)) 
+                            {   
+                                chainCount++;
+                            }
+                        }
+                    }
+                    if (chainCount < lowestChainCount) 
+                    {
+                        lowestChainCount = chainCount;
+                        leastUsefulTileindex = i;
+                    }
+                }
+                i++;
+            }
+        }
+
+        discardTile(toBeDiscaredTileIndex);
+        System.out.println(player.getName() + " discarded tile: " + lastDiscardedTile);
     }
 
     /*
