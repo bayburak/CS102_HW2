@@ -1,3 +1,5 @@
+
+
 public class Player {
     String playerName;
     Tile[] playerTiles;
@@ -61,25 +63,23 @@ public class Player {
 
     }
 
-    /*
-     * checks if this player's hand satisfies the winning condition
-     * to win this player should have 3 chains of length 4, extra tiles
-     * does not disturb the winning condition
-     * @return
-     */
-    public boolean isWinningHand() {
+
+   
+    // Counts the number of chains
+    public int getNoOfChains(){
         int noOfChains = 0;
         Tile prevTile = null;
         int counter = 1;
+        
 
         for(Tile currentTile : playerTiles){
 
-            //Skips the first tile because there is no prevTile at the moment 
+            if (currentTile != null) {
+                 //Skips the first tile because there is no prevTile at the moment 
             if (currentTile == playerTiles[0]) { prevTile = currentTile; continue;}
             
             //Checks whether consecutive tiles have the same value,
-            // if they do have teh same value checks if they are different colors the nincrements the counter
-            // if not resets the counter
+            // This also skips tiles with same value and same color, so there can only be a single chain for a single value
             if(prevTile.getValue() == currentTile.getValue()){
                 if(prevTile.canFormChainWith(currentTile)){ counter++;}
             }
@@ -89,18 +89,33 @@ public class Player {
 
             //if counter has reached four this means a chain has formed, so we increment noOfChains and set the counter to zero
             if(counter == 4){ 
+                
                 noOfChains++;
                 counter = 1;
             }
     
             prevTile = currentTile;
+            }
+           
         }
+        return noOfChains;
+    }
+     /*
+     * checks if this player's hand satisfies the winning condition
+     * to win this player should have 3 chains of length 4, extra tiles
+     * does not disturb the winning condition
+     * @return
+     */
+    public boolean isWinningHand() {
+        
+        int noOfChains = getNoOfChains();
 
         //If the total number of chains is true then this means the player has won
         if(noOfChains >= 3) { return true;}
         else { return false;}
         
     }
+
 
     public int findPositionOfTile(Tile t) {
         int tilePosition = -1;

@@ -23,6 +23,11 @@ public class ApplicationMain {
         char devMode = sc.next().charAt(0);
         boolean devModeOn = devMode == 'Y';
         
+        System.out.print("Do you want to simulate a game with 4 computers? (Y/N): ");
+        char allComp = sc.next().charAt(0);
+        boolean allCompOn = allComp == 'Y';
+        
+
         boolean firstTurn = true;
         boolean gameContinues = true;
         int playerChoice = -1;
@@ -32,7 +37,7 @@ public class ApplicationMain {
             int currentPlayer = game.getCurrentPlayerIndex();
             System.out.println(game.getCurrentPlayerName() + "'s turn.");
             
-            if(currentPlayer == 0) {
+            if(currentPlayer == 0 && !allCompOn) {
                 // this is the human player's turn
                 game.displayCurrentPlayersTiles();
                 game.displayDiscardInformation();
@@ -78,7 +83,7 @@ public class ApplicationMain {
                     System.out.print("Discard the tile in index: ");
                     playerChoice = sc.nextInt();
 
-                    // TODO: make sure the given index is correct, should be 0 <= index <= 14
+                    // ake sure the given index is correct, should be 0 <= index <= 14
                     while (playerChoice < 0 || playerChoice > 14)
                     {
                         System.out.println("Please enter a valid index: ");
@@ -88,19 +93,35 @@ public class ApplicationMain {
                     game.discardTile(playerChoice);
                     game.passTurnToNextPlayer();
                 }
+                else if(game.getnoOfTilesLeft() == 0){ 
+                    System.out.println("Game ended in a tie !");
+                }
                 else{
                     // if we finish the hand we win
                     System.out.println("Congratulations, you win!");
                 }
             }
             else{
+
+                
+                
+                
                 // this is the computer player's turn
                 if(devModeOn) {
                     game.displayCurrentPlayersTiles();
                 }
 
-                // computer picks a tile from tile stack or other player's discard
-                game.pickTileForComputer();
+                
+               
+                // If 4 computers are playing this makes sure the extra tile is discarded in the first round
+                if (!firstTurn) {
+                    // computer picks a tile from tile stack or other player's discard
+                    game.pickTileForComputer();  
+                }
+                else{ firstTurn = false;}
+                
+                
+                
 
                 gameContinues = !game.didGameFinish();
 
@@ -109,11 +130,15 @@ public class ApplicationMain {
                     game.discardTileForComputer();
                     game.passTurnToNextPlayer();
                 }
+                else if(game.getnoOfTilesLeft() == 0){ 
+                    System.out.println("Game ended in a tie !");
+                }
                 else{
                     // current computer character wins
                     System.out.println(game.getCurrentPlayerName() + " wins.");
                 }
             }
         }
+        sc.close();
     }
 }
