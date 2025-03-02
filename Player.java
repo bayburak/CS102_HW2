@@ -53,6 +53,7 @@ public class Player {
                     }
 
                     playerTiles[i] = t;
+                    break;
                 }
             }
             numberOfTiles++;
