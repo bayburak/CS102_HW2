@@ -33,7 +33,7 @@ public class ApplicationMain {
         int playerChoice = -1;
 
         while(gameContinues) {
-            
+            System.out.println();
             int currentPlayer = game.getCurrentPlayerIndex();
             System.out.println(game.getCurrentPlayerName() + "'s turn.");
             
